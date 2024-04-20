@@ -4,7 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import StringVar
 import random
-import sqlite3
+import oracledb
 
 # biblioteca da oracle
 
@@ -24,7 +24,7 @@ import sqlite3
 
 # Caso seja a primeira vez Por favor Gere a tabela com o GerarTabela.py
 
-connection = sqlite3.connect("estoque.db")
+connection = oracledb.connect(user="SYSTEM", password="senha", host="localhost", port="1521")
 cursor = connection.cursor()
 
 
@@ -36,24 +36,24 @@ class CadastrarProduto():
         self.cadastro_design()
         self.root.mainloop()
 
-    def calcular_preco_venda(ca, entry_iv, entry_cf, entry_co, entry_ml, entry_cv, entry_preco_venda):
-        ca = float(ca.get())
-        print(ca, " Custo do produto")
-        iv = float(entry_iv.get())
-        print(iv, " Imposto")
-        cf = float(entry_cf.get())
-        print(cf, "custo fixo")
-        co = float(entry_co.get())
-        print(co, "custo operacionail")
-        ml = float(entry_ml.get())
-        print(ml, " Margem lucro")
-        cv = float(entry_cv.get())
-        print(cv, "preço venda")
-        preco_venda = ca / (1 - (iv + cf + co + ml + cv) / 100)
+    def calcular_preco_venda(self,ca, entry_iv, entry_cf, entry_co, entry_ml, entry_cv, entry_preco_venda):
+        self.ca = float(ca.get())
+        print(self.ca, " Custo do produto")
+        self.iv = float(entry_iv.get())
+        print(self.iv, " Imposto")
+        self.cf = float(entry_cf.get())
+        print(self.cf, "custo fixo")
+        self.co = float(entry_co.get())
+        print(self.co, "custo operacionail")
+        self.ml = float(entry_ml.get())
+        print(self.ml, " Margem lucro")
+        self.cv = float(entry_cv.get())
+        print(self.cv, "preço venda")
+        self.preco_venda = self.ca / (1 - (self.iv + self.cf + self.co + self.ml + self.cv) / 100)
         try:
             entry_preco_venda.config(state="normal")
             entry_preco_venda.delete(0, tk.END)
-            entry_preco_venda.insert(0, "{:.2f}".format(preco_venda))
+            entry_preco_venda.insert(0, "{:.2f}".format(self.preco_venda))
             entry_preco_venda.config(state="readonly")
         except:
             entry_preco_venda.config(state="normal")
